@@ -1,4 +1,5 @@
-package com.zetcode;
+//package com.zetcode;
+
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 import javax.swing.ImageIcon;
