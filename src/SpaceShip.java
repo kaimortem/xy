@@ -2,40 +2,46 @@
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 // Copyright Jan Bodnar from http://zetcode.com
-public class SpaceShip {
+public class SpaceShip extends Sprite {
 
     //TODO introduce Point class difference
     public int dx;
     public int dy;
     //TODO introduce Point class ship location
-    private int x = 40;
-    private int y = 60;
+
     //TODO introduce Point class remotest
-    private int w;
-    private int h;
-    private Image image;
 
+    private List<Missile> missiles;
 
-    public SpaceShip() {
-
-        loadImage();
+    public SpaceShip(int x, int y) {
+        super(x,y);
+        initSpaceShip();
     }
 
-    private void loadImage() {
+    private void initSpaceShip() {
 
-        ImageIcon ii = new ImageIcon("images/spaceship.png");
-        image = ii.getImage();
+        missiles = new ArrayList<>();
 
-        w = image.getWidth(null);
-        h = image.getHeight(null);
+        loadImage("images/spaceship.png");
+        getImageDimensions();
     }
 
     public void move() {
 
         x += dx;
         y += dy;
+    }
+
+    public void fire() {
+        missiles.add(new Missile(x + width, y + height / 2));
+    }
+
+    public List<Missile> getMissiles() {
+        return missiles;
     }
 
     public int getX() {
@@ -46,16 +52,6 @@ public class SpaceShip {
     public int getY() {
 
         return y;
-    }
-
-    public int getWidth() {
-
-        return w;
-    }
-
-    public int getHeight() {
-
-        return h;
     }
 
     public Image getImage() {

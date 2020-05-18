@@ -4,7 +4,7 @@ import java.awt.event.KeyEvent;
 public class KeyHandler {
 
     public Point difference = new Point();
-    
+    public boolean fireMissile = false;
     private KeyEvent e;
     public KeyHandler(KeyEvent e) {
         this.e = e;
@@ -12,6 +12,10 @@ public class KeyHandler {
     public void keyPressed() {
 
         int key = e.getKeyCode();
+
+        if (key == KeyEvent.VK_SPACE) {
+            fireMissile = true;
+        }
 
         if (key == KeyEvent.VK_LEFT) {
             difference.x = -2;

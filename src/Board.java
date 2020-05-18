@@ -1,17 +1,24 @@
 //package com.zetcode;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.List;
+import javax.swing.JPanel;
+import javax.swing.Timer;
 
 public class Board extends JPanel implements ActionListener {
 
+    private final int ICRAFT_X = 40;
+    private final int ICRAFT_Y = 60;
+    private final int DELAY = 10;
     private Timer timer;
     private SpaceShip spaceShip;
-    private final int DELAY = 10;
 
     public Board() {
 
@@ -21,10 +28,10 @@ public class Board extends JPanel implements ActionListener {
     private void initBoard() {
 
         addKeyListener(new TAdapter());
-        setBackground(Color.black);
+        setBackground(Color.BLACK);
         setFocusable(true);
 
-        spaceShip = new SpaceShip();
+        spaceShip = new SpaceShip(ICRAFT_X, ICRAFT_Y);
 
         timer = new Timer(DELAY, this);
         timer.start();
@@ -45,20 +52,46 @@ public class Board extends JPanel implements ActionListener {
 
         g2d.drawImage(spaceShip.getImage(), spaceShip.getX(),
                 spaceShip.getY(), this);
+
+        List<Missile> missiles = spaceShip.getMissiles();
+
+        for (Missile missile : missiles) {
+
+            g2d.drawImage(missile.getImage(), missile.getX(),
+                    missile.getY(), this);
+        }
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        step();
+        updateMissiles();
+        updateSpaceShip();
+
+        repaint();
     }
 
-    private void step() {
+    private void updateMissiles() {
+
+        List<Missile> missiles = spaceShip.getMissiles();
+
+        for (int i = 0; i < missiles.size(); i++) {
+
+            Missile missile = missiles.get(i);
+
+            if (missile.isVisible()) {
+
+                missile.move();
+            } else {
+
+                missiles.remove(i);
+            }
+        }
+    }
+
+    private void updateSpaceShip() {
 
         spaceShip.move();
-
-        repaint(spaceShip.getX()-1, spaceShip.getY()-1,
-                spaceShip.getWidth()+2, spaceShip.getHeight()+2);
     }
 
     private class TAdapter extends KeyAdapter {
@@ -69,6 +102,15 @@ public class Board extends JPanel implements ActionListener {
             keyHandler.keyReleased();
             spaceShip.dx = keyHandler.difference.x;
             spaceShip.dy = keyHandler.difference.y;
+
+
+        }
+
+        private void fireMissile(KeyHandler keyHandler) {
+            if(keyHandler.fireMissile){
+                spaceShip.fire();
+                keyHandler.fireMissile = false;
+            }
         }
 
         @Override
@@ -77,6 +119,7 @@ public class Board extends JPanel implements ActionListener {
             keyHandler.keyPressed();
             spaceShip.dx = keyHandler.difference.x;
             spaceShip.dy = keyHandler.difference.y;
+            fireMissile(keyHandler);
         }
     }
 }
