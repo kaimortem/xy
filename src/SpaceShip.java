@@ -2,15 +2,17 @@
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
 
 // Copyright Jan Bodnar from http://zetcode.com
 public class SpaceShip {
 
+    //TODO introduce Point class difference
     public int dx;
     public int dy;
+    //TODO introduce Point class ship location
     private int x = 40;
     private int y = 60;
+    //TODO introduce Point class remotest
     private int w;
     private int h;
     private Image image;
