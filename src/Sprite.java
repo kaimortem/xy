@@ -5,8 +5,10 @@ import java.awt.*;
 
 public class Sprite {
 
+    //TODO: introduce Point class location
     protected int x;
     protected int y;
+    //TODO: introduce Point remotest
     protected int width;
     protected int height;
     protected boolean visible;
