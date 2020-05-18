@@ -1,7 +1,7 @@
 //package com.zetcode;
 
-import java.awt.Image;
-import javax.swing.ImageIcon;
+import javax.swing.*;
+import java.awt.*;
 
 public class Sprite {
 

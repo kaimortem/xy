@@ -1,15 +1,11 @@
 //package com.zetcode;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Toolkit;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import javax.swing.JPanel;
-import javax.swing.Timer;
 
 public class Board extends JPanel implements ActionListener {
 
@@ -69,12 +65,18 @@ public class Board extends JPanel implements ActionListener {
 
         @Override
         public void keyReleased(KeyEvent e) {
-            spaceShip.keyReleased(e);
+            KeyHandler keyHandler = new KeyHandler(e);
+            keyHandler.keyReleased();
+            spaceShip.dx = keyHandler.difference.x;
+            spaceShip.dy = keyHandler.difference.y;
         }
 
         @Override
         public void keyPressed(KeyEvent e) {
-            spaceShip.keyPressed(e);
+            KeyHandler keyHandler = new KeyHandler(e);
+            keyHandler.keyPressed();
+            spaceShip.dx = keyHandler.difference.x;
+            spaceShip.dy = keyHandler.difference.y;
         }
     }
 }
