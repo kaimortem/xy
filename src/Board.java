@@ -16,7 +16,7 @@ public class Board extends JPanel implements ActionListener {
 
     private final int ICRAFT_X = 40;
     private final int ICRAFT_Y = 60;
-    private final int DELAY = 10;
+    private final int DELAY = 5;
     private Timer timer;
     private SpaceShip spaceShip;
 
@@ -95,15 +95,13 @@ public class Board extends JPanel implements ActionListener {
     }
 
     private class TAdapter extends KeyAdapter {
-
+        KeyHandler keyHandler;
         @Override
         public void keyReleased(KeyEvent e) {
-            KeyHandler keyHandler = new KeyHandler(e);
+            keyHandler = new KeyHandler(e);
             keyHandler.keyReleased();
             spaceShip.dx = keyHandler.difference.x;
             spaceShip.dy = keyHandler.difference.y;
-
-
         }
 
         private void fireMissile(KeyHandler keyHandler) {
@@ -115,7 +113,7 @@ public class Board extends JPanel implements ActionListener {
 
         @Override
         public void keyPressed(KeyEvent e) {
-            KeyHandler keyHandler = new KeyHandler(e);
+            keyHandler = new KeyHandler(e);
             keyHandler.keyPressed();
             spaceShip.dx = keyHandler.difference.x;
             spaceShip.dy = keyHandler.difference.y;
