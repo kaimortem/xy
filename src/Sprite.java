@@ -52,4 +52,8 @@ public class Sprite {
     public void setVisible(Boolean visible) {
         this.visible = visible;
     }
+
+    public Rectangle getBounds() {
+        return new Rectangle(x, y, width, height);
+    }
 }
