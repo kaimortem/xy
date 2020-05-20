@@ -1,10 +1,9 @@
+import java.awt.*;
 
 public class Alien extends Sprite {
 
-    private final int INITIAL_X = 400;
-
-    public Alien(int x, int y) {
-        super(x, y);
+    public Alien(Point location) {
+        super(location);
 
         initAlien();
     }
@@ -17,10 +16,10 @@ public class Alien extends Sprite {
 
     public void move() {
 
-        if (x < 0) {
-            x = INITIAL_X;
+        if (location.x < 0) {
+            location.x = constants.INITIAL_X;
         }
 
-        x -= 1;
+        location.x -= 1;
     }
 }

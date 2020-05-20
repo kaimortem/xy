@@ -4,20 +4,19 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Sprite {
+    protected Constants constants = new Constants();
 
     //TODO: introduce Point class location
-    protected int x;
-    protected int y;
+    protected Point location = new Point();
     //TODO: introduce Point remotest
     protected int width;
     protected int height;
     protected boolean visible;
     protected Image image;
 
-    public Sprite(int x, int y) {
-
-        this.x = x;
-        this.y = y;
+    public Sprite(Point location) {
+        this.location.x = location.x;
+        this.location.y = location.y;
         visible = true;
     }
 
@@ -38,11 +37,11 @@ public class Sprite {
     }
 
     public int getX() {
-        return x;
+        return location.x;
     }
 
     public int getY() {
-        return y;
+        return location.y;
     }
 
     public boolean isVisible() {
@@ -54,6 +53,6 @@ public class Sprite {
     }
 
     public Rectangle getBounds() {
-        return new Rectangle(x, y, width, height);
+        return new Rectangle(location.x, location.y, width, height);
     }
 }

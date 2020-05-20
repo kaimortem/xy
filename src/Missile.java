@@ -1,13 +1,10 @@
+import java.awt.*;
 import java.util.List;
 
 public class Missile extends Sprite {
 
-    private final int BOARD_WIDTH = 390;
-    private final int MISSILE_SPEED = 2;
-
-
-    public Missile(int x, int y) {
-        super(x, y);
+    public Missile(Point location) {
+        super(location);
 
         initMissile();
     }
@@ -20,9 +17,9 @@ public class Missile extends Sprite {
 
     public void move() {
 
-        x += MISSILE_SPEED;
+        location.x += constants.MISSILE_SPEED;
 
-        if (x > BOARD_WIDTH) {
+        if (location.x > constants.BOARD_WIDTH) {
             visible = false;
         }
     }
