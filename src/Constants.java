@@ -3,7 +3,7 @@ public class Constants {
     public static final int ICRAFT_Y = 60;
     public static final int B_WIDTH = 400;
     public static final int B_HEIGHT = 300;
-    public final int DELAY = 5;
+    public final int DELAY = 10;
 
     public final int[][] alienPositons = {
             {2380, 29}, {2500, 59}, {1380, 89},

@@ -18,8 +18,9 @@ public class Board extends JPanel implements ActionListener {
     private Constants constants = new Constants();
     private Point initial = new Point(Constants.ICRAFT_X, Constants.ICRAFT_Y);
     private Button restart = new Button("Restart");
-
+    private boolean restartDrawn;
     public Board() {
+        timer = new Timer(constants.DELAY, this);
         initBoard();
     }
 
@@ -27,12 +28,12 @@ public class Board extends JPanel implements ActionListener {
         setFocusable(true);
         setBackground(Color.BLACK);
         GameStatus.inGame = true;
+        restartDrawn = false;
         setPreferredSize(new Dimension(constants.B_WIDTH, constants.B_HEIGHT));
         spaceship = new SpaceShip(initial);
         addKeyListener(new SteeringAdaptor(spaceship));
         initAliens();
         collision = new Collision(aliens, spaceship);
-        timer = new Timer(constants.DELAY, this);
         timer.start();
     }
 
@@ -52,14 +53,19 @@ public class Board extends JPanel implements ActionListener {
     }
 
     private void restartButton() {
-        restart.setBounds(180,200,80,30);
-        add(restart);
-        restart.addActionListener(e -> {
-            if(GameStatus.inGame == false) {
+
+        if((GameStatus.inGame == false) &&
+                restartDrawn == false
+        ) {
+            restart.setBounds(180, 200, 80, 30);
+            restart.setBackground(Color.WHITE);
+            add(restart);
+            restart.addActionListener(e -> {
                 initBoard();
                 remove(restart);
-            }
-        });
+            });
+            restartDrawn = true;
+        }
     }
 
     @Override
