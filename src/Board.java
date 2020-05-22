@@ -52,7 +52,14 @@ public class Board extends JPanel implements ActionListener {
     }
 
     private void restartButton() {
-        addMouseListener(new ShooterMouseListener(this));
+        restart.setBounds(180,200,80,30);
+        add(restart);
+        restart.addActionListener(e -> {
+            if(GameStatus.inGame == false) {
+                initBoard();
+                remove(restart);
+            }
+        });
     }
 
     @Override
