@@ -14,9 +14,10 @@ public class Board extends JPanel implements ActionListener {
     private Point location;
     private Collision collision;
     private Update update;
-
     private GameStatus status = new GameStatus();
+    private GameOver gameOver = new GameOver();
     private Constants constants = new Constants();
+    private Point initial = new Point(Constants.ICRAFT_X, Constants.ICRAFT_Y);
 
     public Board() {
 
@@ -28,11 +29,9 @@ public class Board extends JPanel implements ActionListener {
         setFocusable(true);
         setBackground(Color.BLACK);
         GameStatus.inGame = true;
-
         setPreferredSize(new Dimension(constants.B_WIDTH, constants.B_HEIGHT));
 
-        location = new Point (constants.ICRAFT_X, constants.ICRAFT_Y);
-        spaceship = new SpaceShip(location);
+        spaceship = new SpaceShip(initial);
         addKeyListener(new SteeringAdaptor(spaceship));
 
         initAliens();
@@ -55,14 +54,12 @@ public class Board extends JPanel implements ActionListener {
         for (int[] point : constants.alienPositons) { addAlienToBoard(point); }
     }
 
-
-
     @Override
     public void paintComponent(Graphics g) {
 
         super.paintComponent(g);
 
-        if(GameStatus.isGameOver()) { drawGameOver(g); }
+        if(GameStatus.isGameOver()) { gameOver.draw(g); }
         if(GameStatus.inGame) { drawObjects(g); };
 
         Toolkit.getDefaultToolkit().sync();
@@ -83,28 +80,12 @@ public class Board extends JPanel implements ActionListener {
     private void drawObjects(Graphics g) {
 
         drawGameObject(g, spaceship);
-
         List<Missile> ms = spaceship.getMissiles();
         for (Missile missile : ms) { drawGameObject(g, missile); }
-
         for (Alien alien : aliens) { drawGameObject(g, alien); }
-
         g.setColor(Color.WHITE);
         g.drawString("Aliens left: " + aliens.size(), 5, 15);
     }
-
-    private void drawGameOver(Graphics g) {
-
-        String msg = "Game Over";
-        Font small = new Font("Helvetica", Font.BOLD, 14);
-        FontMetrics fm = getFontMetrics(small);
-        g.setColor(Color.white);
-        g.setFont(small);
-        g.drawString(msg, (constants.B_WIDTH - fm.stringWidth(msg)) / 2,
-                constants.B_HEIGHT / 2);
-    }
-
-
 
     @Override
     public void actionPerformed(ActionEvent e) {

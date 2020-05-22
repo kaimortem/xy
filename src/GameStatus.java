@@ -5,4 +5,8 @@ public class GameStatus {
       return !inGame;
    }
 
+   public static boolean isGameContinuing() {
+      return inGame;
+   }
+
 }

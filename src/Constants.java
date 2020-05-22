@@ -1,8 +1,8 @@
 public class Constants {
-    public final int ICRAFT_X = 40;
-    public final int ICRAFT_Y = 60;
-    public final int B_WIDTH = 400;
-    public final int B_HEIGHT = 300;
+    public static final int ICRAFT_X = 40;
+    public static final int ICRAFT_Y = 60;
+    public static final int B_WIDTH = 400;
+    public static final int B_HEIGHT = 300;
     public final int DELAY = 5;
 
     public final int[][] alienPositons = {
