@@ -14,10 +14,6 @@ public class Sprite {
     protected boolean visible;
     protected Image image;
 
-    public Sprite() {
-        //NULL sprite
-    }
-
     public Sprite(Point location) {
         this.location.x = location.x;
         this.location.y = location.y;

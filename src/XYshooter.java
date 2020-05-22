@@ -15,7 +15,7 @@ public class XYshooter extends JFrame {
         setResizable(false);
         pack();
 
-        setTitle("Collision");
+        setTitle("XY Shooter");
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }

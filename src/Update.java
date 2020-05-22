@@ -22,35 +22,19 @@ public class Update {
 
         List<Missile> ms = spaceship.getMissiles();
 
-        for (int i = 0; i < ms.size(); i++) {
-
-            Missile m = ms.get(i);
-
-            if (m.isVisible()) {
-                m.move();
-            } else {
-                ms.remove(i);
-            }
-        }
+        ms.removeIf(missile -> !missile.isVisible());
+        ms.forEach(missile -> missile.move());
     }
-
     public void aliens() {
 
         if (aliens.isEmpty()) {
-
+            GameStatus.success = true;
             GameStatus.inGame = false;
             return;
         }
 
-        for (int i = 0; i < aliens.size(); i++) {
+        aliens.removeIf(alien -> !alien.isVisible());
+        aliens.forEach(alien -> alien.move());
 
-            Alien a = aliens.get(i);
-
-            if (a.isVisible()) {
-                a.move();
-            } else {
-                aliens.remove(i);
-            }
-        }
     }
 }
