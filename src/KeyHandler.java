@@ -13,6 +13,10 @@ public class KeyHandler {
 
         int key = e.getKeyCode();
 
+        if(key ==KeyEvent.VK_ESCAPE) {
+            GameStatus.inGame = false;
+        }
+
         if (key == KeyEvent.VK_SPACE) {
             fireMissile = true;
         }
