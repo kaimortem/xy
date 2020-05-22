@@ -1,15 +1,16 @@
+import java.awt.*;
 import java.util.List;
 
-public class Missile extends Sprite {
+public class Missile extends GamePiece {
 
-    private final int BOARD_WIDTH = 390;
-    private final int MISSILE_SPEED = 2;
+    public Missile(Point location) {
 
-
-    public Missile(int x, int y) {
-        super(x, y);
-
+        super(location);
         initMissile();
+    }
+
+    protected GamePiece makeMissile(Point location) {
+        return new Missile(location);
     }
 
     private void initMissile() {
@@ -18,12 +19,13 @@ public class Missile extends Sprite {
         getImageDimensions();
     }
 
+    private void checkBorderCase(){
+        if (location.x > constants.BOARD_WIDTH) { visible = false; }
+    }
+
     public void move() {
 
-        x += MISSILE_SPEED;
-
-        if (x > BOARD_WIDTH) {
-            visible = false;
-        }
+        location.x += constants.MISSILE_SPEED;
+        checkBorderCase();
     }
 }

@@ -6,20 +6,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 // Copyright Jan Bodnar from http://zetcode.com
-public class SpaceShip extends Sprite {
+public class SpaceShip extends GamePiece {
 
-    //TODO introduce Point class difference
-    public int dx;
-    public int dy;
-    //TODO introduce Point class ship location
-
-    //TODO introduce Point class remotest
-
+    public Point difference = new Point();
     private List<Missile> missiles;
 
-    public SpaceShip(int x, int y) {
-        super(x,y);
+    public SpaceShip(Point location) {
+        super(location);
         initSpaceShip();
+    }
+
+    protected GamePiece makeSpaceShip (Point location) {
+        return new SpaceShip(location);
     }
 
     private void initSpaceShip() {
@@ -32,12 +30,14 @@ public class SpaceShip extends Sprite {
 
     public void move() {
 
-        x += dx;
-        y += dy;
+        location.x += difference.x;
+        location.y += difference.y;
     }
 
     public void fire() {
-        missiles.add(new Missile(x + width, y + height / 2));
+
+        Point missileLocation = new Point(location.x + width, location.y + height / 2);
+        missiles.add(new Missile(missileLocation));
     }
 
     public List<Missile> getMissiles() {
@@ -46,12 +46,12 @@ public class SpaceShip extends Sprite {
 
     public int getX() {
 
-        return x;
+        return location.x;
     }
 
     public int getY() {
 
-        return y;
+        return location.y;
     }
 
     public Image getImage() {
