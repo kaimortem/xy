@@ -120,6 +120,7 @@ public class Board extends JPanel implements ActionListener {
         if(e.getSource() == restart) {
             startGame();
             remove(restart);
+            GameScreen.restartDrawn = false;
         }
 
         inGame();
