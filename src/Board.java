@@ -3,6 +3,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -97,7 +98,7 @@ public class Board extends JPanel implements ActionListener {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        if(GameStatus.isGameOver() &&!GameStatus.startGame) {
+        if(GameStatus.isGameOver() && !GameStatus.startGame) {
             gameOver.draw(g);
             if(!GameScreen.restartDrawn) {
                 addRestartButton();
@@ -122,10 +123,14 @@ public class Board extends JPanel implements ActionListener {
         }
 
         inGame();
-        Update update = new Update(aliens, spaceship);
-        update.ship();
-        update.missiles();
-        update.aliens();
+        Thread shipUpdateThread = new Update(spaceship);
+        Thread missileUpdateThread = new Update((ArrayList<Missile>) spaceship.getMissiles());
+        Thread aliensUpdateThread = new Update(aliens);
+
+        shipUpdateThread.start();
+        missileUpdateThread.start();
+        aliensUpdateThread.start();
+
         collision.checkCollisions();
         repaint();
     }
