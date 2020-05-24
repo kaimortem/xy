@@ -3,15 +3,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Graphics;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
 public class Board extends JPanel implements ActionListener {
     private Timer timer;
     private SpaceShip spaceship;
-    private List<Alien> aliens;
+    private Brood brood = new Brood();
+    private HellFire hellfire = new HellFire();
+    private Salvo salvo = new Salvo();
 
     private Collision collision;
 
@@ -43,7 +43,7 @@ public class Board extends JPanel implements ActionListener {
         spaceship = new SpaceShip(initial);
         addKeyListener(new SteeringAdaptor(spaceship));
         initAliens();
-        collision = new Collision(aliens, spaceship);
+        collision = new Collision(brood.aliens, spaceship);
     }
 
     public void initBoard() {
@@ -53,32 +53,38 @@ public class Board extends JPanel implements ActionListener {
 
     private void addAlienToBoard (int[] point){
         Point alienLocation = new Point(point[0], point[1]);
-        aliens.add(new Alien(alienLocation));
+        brood.aliens.add(new Alien(alienLocation));
     }
 
     public void initAliens() {
-        aliens = new ArrayList<>();
+        brood.aliens = new ArrayList<>();
         for (int[] point : constants.alienPositons) { addAlienToBoard(point); }
     }
 
     private void drawGameObject(Graphics g, GamePiece gamePiece) {
-        if (gamePiece.isVisible())
-        {
-            g.drawImage(
-                gamePiece.getImage(),
-                gamePiece.getX(),
-                gamePiece.getY(),
-                this);
+        try {
+            if (gamePiece.isVisible()) {
+                g.drawImage(
+                        gamePiece.getImage(),
+                        gamePiece.getX(),
+                        gamePiece.getY(),
+                        this);
+            }
+        }catch (NullPointerException e){
+
         }
     }
 
     private void drawObjects(Graphics g) {
         drawGameObject(g, spaceship);
-        List<Missile> ms = spaceship.getMissiles();
-        for (Missile missile : ms) { drawGameObject(g, missile); }
-        for (Alien alien : aliens) { drawGameObject(g, alien); }
+        salvo.missiles = spaceship.getMissiles();
+        ExplosionSmall exp = collision.getExplosion();
+        if(exp != null) { hellfire.add(exp); }
+        for (Missile missile : salvo.missiles) { drawGameObject(g, missile); }
+        for (Alien alien : brood.aliens) { drawGameObject(g, alien); }
+        for (ExplosionSmall explosion : hellfire.explosions) { drawGameObject(g, explosion);};
         g.setColor(Color.WHITE);
-        g.drawString("Aliens left: " + aliens.size(), 5, 15);
+        g.drawString("Aliens left: " + brood.aliens.size(), 5, 15);
     }
 
     public void startGame() {
@@ -125,12 +131,15 @@ public class Board extends JPanel implements ActionListener {
 
         inGame();
         Thread shipUpdateThread = new Update(spaceship);
-        Thread missileUpdateThread = new Update((ArrayList<Missile>) spaceship.getMissiles());
-        Thread aliensUpdateThread = new Update(aliens);
+        salvo.missiles = spaceship.getMissiles();
+        Thread missileUpdateThread = new Update(salvo);
+        Thread aliensUpdateThread = new Update(brood);
+        Thread explosionUpdateThread = new Update(hellfire);
 
         shipUpdateThread.start();
         missileUpdateThread.start();
         aliensUpdateThread.start();
+        explosionUpdateThread.start();
 
         collision.checkCollisions();
         repaint();

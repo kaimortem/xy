@@ -3,27 +3,39 @@ import java.util.List;
 
 public class Update extends Thread{
     private SpaceShip spaceship;
-    private List<Alien> aliens;
-    private List<Missile> ms;
-
-    public Update(List<Alien> aliens, SpaceShip spaceship) {
-        this.aliens = aliens;
-        this.spaceship = spaceship;
-    }
+    private List<Alien> aliens = new ArrayList<>();;
+    private List<Missile> missiles = new ArrayList<>();;
+    private List<ExplosionSmall> explosions = new ArrayList<>();;
 
     public Update(SpaceShip spaceship) {
         this.spaceship = spaceship;
         ship();
     }
 
-    public Update(ArrayList<Missile> ms) {
-        this.ms = ms;
-        missiles(ms);
+    public Update(Salvo salvo) {
+        this.missiles = salvo.missiles;
+        missiles();
     }
 
-    public Update(List<Alien> aliens) {
-        this.aliens = aliens;
+    public Update(Brood brood) {
+        this.aliens = brood.aliens;
         aliens();
+    }
+
+    public Update(HellFire hellFire) {
+        this.explosions = hellFire.explosions;
+        endExplosions();
+        explosions();
+    }
+
+    public void endExplosions() {
+        this.explosions.removeIf(explosion -> !explosion.isVisible());
+    }
+
+    public void explosions() {
+        this.explosions.forEach(explosion -> {
+            explosion.progress();
+        });
     }
 
     public void ship() {
@@ -34,9 +46,9 @@ public class Update extends Thread{
         }
     }
 
-    public void missiles(List<Missile> ms) {
-        ms.removeIf(missile -> !missile.isVisible());
-        ms.forEach(missile -> missile.move());
+    public void missiles() {
+        missiles.removeIf(missile -> !missile.isVisible());
+        missiles.forEach(missile -> missile.move());
     }
     public void aliens() {
 

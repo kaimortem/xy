@@ -4,7 +4,7 @@ import java.util.List;
 public class Collision {
     private SpaceShip spaceship;
     private List<Alien> aliens;
-
+    private ExplosionSmall explosion;
     public Collision(List<Alien> aliens, SpaceShip spaceship) {
         this.aliens = aliens;
         this.spaceship = spaceship;
@@ -37,11 +37,17 @@ public class Collision {
                 Rectangle r2 = alien.getBounds();
 
                 if (r1.intersects(r2)) {
+                    explosion = new ExplosionSmall(m.location);
+                    explosion.setVisible(true);
 
                     m.setVisible(false);
                     alien.setVisible(false);
                 }
             }
         }
+    }
+
+    public ExplosionSmall getExplosion() {
+        return explosion;
     }
 }
