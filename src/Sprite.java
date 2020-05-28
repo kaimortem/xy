@@ -6,7 +6,6 @@ import java.awt.*;
 public class Sprite {
     protected Constants constants = new Constants();
 
-    //TODO: introduce Point class location
     protected Point location = new Point();
     //TODO: introduce Point remotest
     protected int width;

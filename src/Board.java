@@ -2,9 +2,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Graphics;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
-import javax.swing.JPanel;
-import javax.swing.Timer;
+import javax.swing.*;
 
 public class Board extends JPanel implements ActionListener {
     private Timer timer;
@@ -12,23 +13,14 @@ public class Board extends JPanel implements ActionListener {
     private Brood brood = new Brood();
     private HellFire hellfire = new HellFire();
     private Salvo salvo = new Salvo();
-
     private Collision collision;
-
+    private PropertyChangeSupport changes = new PropertyChangeSupport(this);
     private Constants constants = new Constants();
     private final Point initial = new Point(Constants.ICRAFT_X, Constants.ICRAFT_Y);
-    private GameScreen gameScreen;
-    private GameOver gameOver = new GameOver();
-    private Button start;
-    private Button restart;
-
+    //public GameStatus gameStatus = new GameStatus();
     public Board() {
         defineBoard();
         GameStatus.startGame = true;
-        gameScreen = new GameScreen();
-        start = gameScreen.makeStartButton();
-        start.addActionListener(this);
-        add(start);
         timer = new Timer(constants.DELAY, this);
     }
 
@@ -51,7 +43,7 @@ public class Board extends JPanel implements ActionListener {
         defineGame();
     }
 
-    private void addAlienToBoard (int[] point){
+    private void addAlienToBoard(int[] point) {
         Point alienLocation = new Point(point[0], point[1]);
         brood.aliens.add(new Alien(alienLocation));
     }
@@ -70,7 +62,7 @@ public class Board extends JPanel implements ActionListener {
                         gamePiece.getY(),
                         this);
             }
-        }catch (NullPointerException e){
+        }catch (NullPointerException e) {
 
         }
     }
@@ -93,49 +85,30 @@ public class Board extends JPanel implements ActionListener {
         GameStatus.inGame = true;
     }
 
-    private void addRestartButton() {
-        restart = gameScreen.makeRestartButton();
-        restart.addActionListener(this);
-        add(restart);
-        GameScreen.restartDrawn = true;
-    }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        if(GameStatus.isGameOver() && !GameStatus.startGame) {
-            gameOver.draw(g);
-            if(!GameScreen.restartDrawn) {
-                addRestartButton();
-            }
+        if(GameStatus.inGame) {
+            drawObjects(g);
+            Toolkit.getDefaultToolkit().sync();
+            return;
         }
 
-        if(GameStatus.inGame == true) { drawObjects(g); }
-        Toolkit.getDefaultToolkit().sync();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == start) {
-            startGame();
-            remove(start);
-            GameStatus.startGame = false;
-        }
-
-        if(e.getSource() == restart) {
-            startGame();
-            remove(restart);
-            GameScreen.restartDrawn = false;
-        }
-
         inGame();
         Thread shipUpdateThread = new Update(spaceship);
         salvo.missiles = spaceship.getMissiles();
         Thread missileUpdateThread = new Update(salvo);
         Thread aliensUpdateThread = new Update(brood);
         Thread explosionUpdateThread = new Update(hellfire);
+        //Thread gameRunThread = new Update(timer);
 
+        //gameRunThread.start();
         shipUpdateThread.start();
         missileUpdateThread.start();
         aliensUpdateThread.start();
@@ -148,6 +121,10 @@ public class Board extends JPanel implements ActionListener {
     private void inGame() {
         if (!GameStatus.inGame) {
             timer.stop();
+            XYshooter topFrame = (XYshooter) SwingUtilities.getWindowAncestor(this);
+            topFrame.gameOver();
         }
     }
+
+
 }

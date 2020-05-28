@@ -14,7 +14,7 @@ public class KeyHandler {
         int key = e.getKeyCode();
 
         if(key ==KeyEvent.VK_ESCAPE) {
-            GameStatus.inGame = false;
+            GameStatus.exit = true;
         }
 
         if (key == KeyEvent.VK_SPACE) {

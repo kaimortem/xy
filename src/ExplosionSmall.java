@@ -15,7 +15,7 @@ public class ExplosionSmall extends GamePiece {
 
     public void progress(){
         frameIndex += 1;
-        if (frameIndex >= 15) {
+        if (frameIndex >= 100) {
             setVisible(false);
         }
     }

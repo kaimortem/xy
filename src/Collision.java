@@ -1,3 +1,4 @@
+import javax.swing.event.ChangeEvent;
 import java.awt.*;
 import java.util.List;
 
@@ -5,6 +6,8 @@ public class Collision {
     private SpaceShip spaceship;
     private List<Alien> aliens;
     private ExplosionSmall explosion;
+    private boolean inGame;
+    public boolean gameOver = false;
     public Collision(List<Alien> aliens, SpaceShip spaceship) {
         this.aliens = aliens;
         this.spaceship = spaceship;
@@ -22,6 +25,7 @@ public class Collision {
 
                 spaceship.setVisible(false);
                 alien.setVisible(false);
+                gameOver = true;
                 GameStatus.inGame = false;
             }
         }
@@ -45,6 +49,10 @@ public class Collision {
                 }
             }
         }
+    }
+
+    public boolean getInGame() {
+        return inGame;
     }
 
     public ExplosionSmall getExplosion() {

@@ -1,11 +1,20 @@
+import javax.swing.*;
+import javax.swing.Timer;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class Update extends Thread{
     private SpaceShip spaceship;
     private List<Alien> aliens = new ArrayList<>();;
     private List<Missile> missiles = new ArrayList<>();;
     private List<ExplosionSmall> explosions = new ArrayList<>();;
+
+    public Update(Timer gameTime) {
+        if( !GameStatus.inGame ) {
+            gameTime.stop();
+        }
+    }
 
     public Update(SpaceShip spaceship) {
         this.spaceship = spaceship;
@@ -28,11 +37,11 @@ public class Update extends Thread{
         explosions();
     }
 
-    public void endExplosions() {
+    private void endExplosions() {
         this.explosions.removeIf(explosion -> !explosion.isVisible());
     }
 
-    public void explosions() {
+    private void explosions() {
         this.explosions.forEach(explosion -> {
             explosion.progress();
         });
