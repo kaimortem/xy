@@ -10,7 +10,7 @@ public class ShootingMissilesEx extends JFrame {
 
     private void initUI() {
 
-        add(new Board());
+        add(new Board(1));
 
         setSize(840, 520);
         setResizable(false);

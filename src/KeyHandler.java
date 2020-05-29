@@ -22,19 +22,19 @@ public class KeyHandler {
         }
 
         if (key == KeyEvent.VK_LEFT) {
-            difference.x = -2;
+            difference.x = -1;
         }
 
         if (key == KeyEvent.VK_RIGHT) {
-            difference.x = 2;
+            difference.x = 1;
         }
 
         if (key == KeyEvent.VK_UP) {
-            difference.y = -2;
+            difference.y = -1;
         }
 
         if (key == KeyEvent.VK_DOWN) {
-            difference.y = 2;
+            difference.y = 1;
         }
     }
 

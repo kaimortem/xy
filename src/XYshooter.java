@@ -16,8 +16,10 @@ public class XYshooter extends JFrame implements ActionListener{
     GameGoal goal;
     JPanel boards;
     CardLayout cardLayout;
+    private int level;
 
     public XYshooter() {
+        level = 1;
         addChangeListener(e -> {
             Collision coll = (Collision)e.getSource();
             if(coll.gameOver) {
@@ -38,7 +40,7 @@ public class XYshooter extends JFrame implements ActionListener{
         start.addActionListener(this);
         startMenu = new StartMenuBoard();
         gameOverBoard = new GameOverBoard();
-        gameBoard = new Board();
+        gameBoard = new Board(level);
         boards.add(gameOverBoard, "gameOver");
         boards.add(startMenu, "menu");
         boards.add(gameBoard, "game");
@@ -99,8 +101,23 @@ public class XYshooter extends JFrame implements ActionListener{
         }
     }
 
+    public void levelUp(int level) {
+        cardLayout.removeLayoutComponent(gameBoard);
+        gameBoard = new Board(level);
+        boards.add(gameBoard, "game");
+        cardLayout.show(boards, "game");
+        gameBoard.grabFocus();
+        gameBoard.requestFocus();
+        gameBoard.initBoard();
+        gameBoard.startGame();
+        gameBoard.setVisible(true);
+        pack();
+        setVisible(true);
+    }
+
     public void gameOver() {
         System.out.println("game over");
+        if(restart != null) gameOverBoard.remove(restart);
         restart = new JButton("RESTART");
         restart.addActionListener(this);
         restart.setBounds(100, 200, 80, 30);

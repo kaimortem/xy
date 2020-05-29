@@ -12,7 +12,7 @@ public class MovingSpriteEx extends JFrame {
 
     private void initUI() {
 
-        add(new Board());
+        add(new Board(1));
 
         setTitle("xy shooter DEMO");
         setSize(840, 520);

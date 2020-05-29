@@ -2,9 +2,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Graphics;
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
+import java.util.Random;
 import javax.swing.*;
 
 public class Board extends JPanel implements ActionListener {
@@ -17,8 +17,13 @@ public class Board extends JPanel implements ActionListener {
     private PropertyChangeSupport changes = new PropertyChangeSupport(this);
     private Constants constants = new Constants();
     private final Point initial = new Point(Constants.ICRAFT_X, Constants.ICRAFT_Y);
-    //public GameStatus gameStatus = new GameStatus();
-    public Board() {
+    private int gameLevel;
+    private Level level;
+    private XYshooter topFrame;
+
+    public Board(int levelIndex) {
+        gameLevel = levelIndex;
+        level = new Level(levelIndex);
         defineBoard();
         GameStatus.startGame = true;
         timer = new Timer(constants.DELAY, this);
@@ -32,6 +37,7 @@ public class Board extends JPanel implements ActionListener {
 
     private void defineGame() {
         GameStatus.inGame = true;
+        GameStatus.success = false;
         spaceship = new SpaceShip(initial);
         addKeyListener(new SteeringAdaptor(spaceship));
         initAliens();
@@ -50,7 +56,11 @@ public class Board extends JPanel implements ActionListener {
 
     public void initAliens() {
         brood.aliens = new ArrayList<>();
-        for (int[] point : constants.alienPositons) { addAlienToBoard(point); }
+        for (int i = 0; i < level.numberOfAliens; i++ ) {
+            int random = new Random().nextInt(constants.alienPositons.length);
+            int[] point = constants.alienPositons[random];
+            addAlienToBoard(point);
+        }
     }
 
     private void drawGameObject(Graphics g, GamePiece gamePiece) {
@@ -76,7 +86,7 @@ public class Board extends JPanel implements ActionListener {
         for (Alien alien : brood.aliens) { drawGameObject(g, alien); }
         for (ExplosionSmall explosion : hellfire.explosions) { drawGameObject(g, explosion);};
         g.setColor(Color.WHITE);
-        g.drawString("Aliens left: " + brood.aliens.size(), 5, 15);
+        g.drawString("LEVEL: " + gameLevel + " Aliens left: " + brood.aliens.size(), 5, 15);
     }
 
     public void startGame() {
@@ -95,20 +105,19 @@ public class Board extends JPanel implements ActionListener {
             Toolkit.getDefaultToolkit().sync();
             return;
         }
-
+        levelWin();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+
         inGame();
         Thread shipUpdateThread = new Update(spaceship);
         salvo.missiles = spaceship.getMissiles();
         Thread missileUpdateThread = new Update(salvo);
         Thread aliensUpdateThread = new Update(brood);
         Thread explosionUpdateThread = new Update(hellfire);
-        //Thread gameRunThread = new Update(timer);
 
-        //gameRunThread.start();
         shipUpdateThread.start();
         missileUpdateThread.start();
         aliensUpdateThread.start();
@@ -118,11 +127,30 @@ public class Board extends JPanel implements ActionListener {
         repaint();
     }
 
+    private void levelWin(){
+        if(GameStatus.success){
+            System.out.println("Level up");
+            GameStatus.success = false;
+            try {
+                topFrame = (XYshooter) SwingUtilities.getRoot(this);
+                topFrame.gameBoard = new Board(gameLevel + 1);
+                topFrame.levelUp(gameLevel + 1);
+            }
+            catch (NullPointerException e) {
+
+            }
+        }
+    }
+
     private void inGame() {
         if (!GameStatus.inGame) {
             timer.stop();
-            XYshooter topFrame = (XYshooter) SwingUtilities.getWindowAncestor(this);
-            topFrame.gameOver();
+            try {
+                topFrame = (XYshooter) SwingUtilities.getWindowAncestor(this);
+                topFrame.gameOver();
+            }catch (NullPointerException e) {
+
+            }
         }
     }
 
