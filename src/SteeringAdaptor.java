@@ -1,14 +1,25 @@
+import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-public class SteeringAdaptor extends KeyAdapter {
+public class SteeringAdaptor {
     private final SpaceShip spaceship;
     KeyHandler keyHandler;
+    private static final int IFW = JComponent.WHEN_IN_FOCUSED_WINDOW;
+    private static final String MOVE_UP = "move up";
+    private static final String MOVE_DOWN = "move down";
+    private static final String FIRE = "move fire";
+
     public SteeringAdaptor(SpaceShip spaceship) {
         this.spaceship = spaceship;
+
     }
 
-    @Override
+
+
+
+    //
+
     public void keyReleased(KeyEvent e) {
         keyHandler = new KeyHandler(e);
         keyHandler.keyReleased();
@@ -23,7 +34,7 @@ public class SteeringAdaptor extends KeyAdapter {
         }
     }
 
-    @Override
+
     public void keyPressed(KeyEvent e) {
         keyHandler = new KeyHandler(e);
         keyHandler.keyPressed();

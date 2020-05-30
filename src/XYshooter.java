@@ -6,12 +6,12 @@ import javax.swing.*;
 import static com.sun.java.accessibility.util.SwingEventMonitor.addChangeListener;
 
 public class XYshooter extends JFrame implements ActionListener{
-    private static final int IFW = JComponent.WHEN_IN_FOCUSED_WINDOW;
     Board gameBoard;
     StartMenuBoard startMenu;
     JButton start;
     JButton restart;
     GameOverBoard gameOverBoard;
+    JPanel levelUpBoard;
     VictoryCondition victoryCondition;
     GameGoal goal;
     JPanel boards;
@@ -41,9 +41,11 @@ public class XYshooter extends JFrame implements ActionListener{
         startMenu = new StartMenuBoard();
         gameOverBoard = new GameOverBoard();
         gameBoard = new Board(level);
+        levelUpBoard = new JPanel();
         boards.add(gameOverBoard, "gameOver");
         boards.add(startMenu, "menu");
         boards.add(gameBoard, "game");
+        boards.add(levelUpBoard, "");
         startMenu.add(start, BorderLayout.CENTER);
         add(boards, BorderLayout.CENTER);
 
@@ -116,7 +118,7 @@ public class XYshooter extends JFrame implements ActionListener{
     }
 
     public void gameOver() {
-        System.out.println("game over");
+        System.out.println("finished");
         if(restart != null) gameOverBoard.remove(restart);
         restart = new JButton("RESTART");
         restart.addActionListener(this);

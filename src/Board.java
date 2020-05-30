@@ -2,12 +2,15 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.*;
 
 public class Board extends JPanel implements ActionListener {
+    private static final String MOVE_UP_FIRE = "up fire";
+    private static final String MOVE_DOWN_FIRE = "down fire";
     private Timer timer;
     private SpaceShip spaceship;
     private Brood brood = new Brood();
@@ -20,6 +23,13 @@ public class Board extends JPanel implements ActionListener {
     private int gameLevel;
     private Level level;
     private XYshooter topFrame;
+    private static final int IFW = JComponent.WHEN_IN_FOCUSED_WINDOW;
+    private static final String MOVE_UP = "up";
+    private static final String MOVE_DOWN = "down";
+    private static final String FIRE = "fire";
+    private static final String FIRE_OFF = "fire off";
+    private static final String FIRE_CONTINUE = "continuous fire";
+
 
     public Board(int levelIndex) {
         gameLevel = levelIndex;
@@ -39,7 +49,23 @@ public class Board extends JPanel implements ActionListener {
         GameStatus.inGame = true;
         GameStatus.success = false;
         spaceship = new SpaceShip(initial);
-        addKeyListener(new SteeringAdaptor(spaceship));
+        this.getInputMap(IFW);
+        this.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0, false),MOVE_UP);
+        this.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0, false), MOVE_DOWN);
+        //this.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), MOVE_UP_FIRE);
+        //this.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), MOVE_DOWN_FIRE);
+        this.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, false), FIRE_CONTINUE);
+        this.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, true), FIRE_OFF);
+
+        this.getActionMap().put(MOVE_UP, spaceship.getActionUp());
+        this.getActionMap().put(MOVE_DOWN, spaceship.getActionDown());
+
+        this.getActionMap().put(MOVE_UP_FIRE, spaceship.getMoveUpAndShoot());
+        this.getActionMap().put(MOVE_DOWN_FIRE, spaceship.getMoveDownAndShoot());
+
+        this.getActionMap().put(FIRE_OFF, spaceship.getFireOff());
+        this.getActionMap().put(FIRE_CONTINUE, spaceship.getContinuousFire());
+
         initAliens();
         collision = new Collision(brood.aliens, spaceship);
     }
